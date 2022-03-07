@@ -65,6 +65,60 @@ public class BookTests
         }
     }
 
+    [Fact]
+    public void SetNewStock_Should_SetANewStockInstance()
+    {
+        // Arrange
+        Book book = CreateBaseBook();
+        int originalAmount = 2000;
+        int copiesAmount = 11;
+        BookStock stock = BookStock.Create(originalAmount, copiesAmount);
+        
+
+        // Act
+        book.SetNewStock(
+            BookStock.Create(originalAmount, copiesAmount));
+
+        // Assert
+        Assert.NotNull(stock);
+        Assert.Equal(stock, book.Stock);
+    }
+
+    [Theory]
+    [InlineData( 1)]
+    [InlineData( 5)]
+    [InlineData( 10000)]
+    [InlineData( 0)]
+    public void SetNewStock_Should_Throw_When_OriginalAmount_IsSetBelowZero(int copies)
+    {
+        // Arrange
+        Book book = CreateBaseBook(original: 0, copies: copies);
+        Action SetNewStock = () => book.SetNewStock(
+               BookStock.Create(book.Stock.OriginalAmount - 1, book.Stock.CopiesAmount));
+        
+        // Act & Assert
+        Assert.Throws<OutOfStockException>(() => SetNewStock());
+        Assert.Equal(0, book.Stock.OriginalAmount);
+    }
+
+    [Theory]
+    [InlineData(1)]
+    [InlineData(5)]
+    [InlineData(10000)]
+    [InlineData(0)]
+
+    public void SetNewStock_Should_Throw_When_CopiesAmount_IsSetBelowZero(int originals)
+    {
+        // Arrange
+        Book book = CreateBaseBook(original: originals, copies: 0);
+        Action SetNewStock = () => book.SetNewStock(
+               BookStock.Create(book.Stock.OriginalAmount, book.Stock.CopiesAmount - 1));
+
+        // Act & Assert
+        Assert.Throws<OutOfStockException>(() => SetNewStock());
+        Assert.Equal(0, book.Stock.CopiesAmount);
+    }
+
     private static Book CreateBaseBook(string isbn = "978-1-0217-2611-7", int original = 15, int copies = 30)
     {
 

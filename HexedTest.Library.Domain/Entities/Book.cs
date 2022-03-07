@@ -37,6 +37,11 @@ public class Book
 
         if (!isValid) throw new InvalidBookStateException("Invalid book state");
     }
+
+    public void SetNewStock(BookStock stock)
+    {
+        Stock = stock;
+    }
 }
 
 
