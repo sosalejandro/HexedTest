@@ -22,9 +22,10 @@ public class BookTests
         // Assert
         Assert.NotNull(book);
 
-        Assert.False(string.IsNullOrWhiteSpace(book.ISBN));
-        Assert.False(string.IsNullOrWhiteSpace(book.Author));
-        Assert.False(string.IsNullOrWhiteSpace(book.Title));
+        Assert.False(string.IsNullOrWhiteSpace(book.ISBN), "Book ISBN is invalid");
+        Assert.False(string.IsNullOrWhiteSpace(book.Author), "Book Author is invalid");
+        Assert.False(string.IsNullOrWhiteSpace(book.Title), "Book Title is invalid");
+        Assert.False(book.YearPublished == default, "Book YearPublished is invalid");
         Assert.NotNull(book.Stock);
     }
 
@@ -40,7 +41,7 @@ public class BookTests
     [InlineData("", "", "title", "12/25/2015 12:00:00 AM")]
     [InlineData("", "author", "title", "")]
     [InlineData("isbn", "", "title", "12/25/2015 12:00:00 AM")]
-    [InlineData("", "", "", "12/25/2015 12:00:00 AM")]    
+    [InlineData("", "", "", "12/25/2015 12:00:00 AM")]  
     public void Create_Should_Throw_WhenInputsAreInvalid(
         string isbn,
         string author,
@@ -106,7 +107,6 @@ public class BookTests
     [InlineData(5)]
     [InlineData(10000)]
     [InlineData(0)]
-
     public void SetNewStock_Should_Throw_When_CopiesAmount_IsSetBelowZero(int originals)
     {
         // Arrange
