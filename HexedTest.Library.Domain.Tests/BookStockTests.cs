@@ -29,7 +29,7 @@ public class BookStockTests
     [InlineData(-1, -1)]
     [InlineData(0, -1)]
     [InlineData(-1, 0)]
-    public void Validate_Should_Throw_WhenStockHasRunOutOfItems
+    public void Create_Should_Throw_WhenStockHasRunOutOfItems
         (int originals, int copies)
     { 
         // Arrange
