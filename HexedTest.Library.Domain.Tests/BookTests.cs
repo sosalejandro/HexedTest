@@ -11,7 +11,7 @@ namespace HexedTest.Library.Domain.Tests;
 public class BookTests
 {
     [Fact]
-    public void Create_Should_CreateAValidBook_WhenMethodIsCalled()
+    public void Create_Should_CreateAValidBook()
     {
         // Arrange
         Book book;
