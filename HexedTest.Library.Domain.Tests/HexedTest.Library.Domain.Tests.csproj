@@ -21,7 +21,11 @@
   </ItemGroup>
 
 	<ItemGroup>
-		<InternalsVisibleTo Include="HexedTest.Library.Domain.Tests"/>
+		<InternalsVisibleTo Include="HexedTest.Library.Domain.Tests" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\HexedTest.Library.Domain\HexedTest.Library.Domain.csproj" />
 	</ItemGroup>
 
 </Project>
