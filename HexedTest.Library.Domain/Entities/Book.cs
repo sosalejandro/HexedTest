@@ -1,4 +1,5 @@
-﻿using HexedTest.Library.Domain.ValueObjects;
+﻿using HexedTest.Library.Domain.Exceptions;
+using HexedTest.Library.Domain.ValueObjects;
 
 namespace HexedTest.Library.Domain.Entities;
 
@@ -21,7 +22,21 @@ public class Book
 
     public static Book Create(string isbn, string author, string title, DateTime yearPublished, BookStock stock)
     {
+        Validate(isbn, author, title, yearPublished);
         return new Book(isbn, author, title, yearPublished, stock);
     }
+
+    protected static void Validate(string isbn, string author, string title, DateTime yearPublished)
+    {
+        bool isValid = true;
+
+        if (string.IsNullOrWhiteSpace(isbn)) isValid = false;
+        if (string.IsNullOrWhiteSpace(author)) isValid = false;
+        if (string.IsNullOrWhiteSpace(title)) isValid = false;
+        if (yearPublished == default) isValid = false;
+
+        if (!isValid) throw new InvalidBookStateException("Invalid book state");
+    }
 }
+
 
