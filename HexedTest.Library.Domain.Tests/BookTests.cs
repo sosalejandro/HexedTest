@@ -135,7 +135,7 @@ public class BookTests
         string isbn = "978-1-0217-2611-7",
         string author = "Gaspar Noe",
         string title = "Black Swan",
-        int original = 15,
+        int original = 15, 
         int copies = 30)
     {
 
