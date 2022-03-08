@@ -28,5 +28,10 @@ public class BorrowOrder
     {
         return new BorrowOrder(Guid.NewGuid(), userId, bookISBN);
     }
+
+    public void SetCopy()
+    {
+        IsCopy = true;
+    }
 }
 

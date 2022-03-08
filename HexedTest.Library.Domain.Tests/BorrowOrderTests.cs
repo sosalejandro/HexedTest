@@ -28,5 +28,22 @@ public class BorrowOrderTests
         Assert.NotEqual(default, order.DateRequested);
         Assert.Null(order.DateReturned);
     }
+
+    [Fact]
+    public void SetCopy_Should_SetIsCopy_True()
+    {
+        // Arrange
+        BorrowOrder order;
+        Guid userId = Guid.NewGuid();
+        string bookISBN = "978-1-0217-2611-7";
+        order = BorrowOrder.Create(userId, bookISBN);
+
+        // Act
+        order.SetCopy();
+
+        // Assert
+        Assert.True(order.IsCopy);
+        Assert.False(order.IsReturned);
+    }    
 }
 
