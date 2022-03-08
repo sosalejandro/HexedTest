@@ -26,6 +26,19 @@ public class Book
         return new Book(isbn, author, title, yearPublished, stock);
     }
 
+    public void Validate()
+    {
+        bool isValid = true;
+
+        if (string.IsNullOrWhiteSpace(ISBN)) isValid = false;
+        if (string.IsNullOrWhiteSpace(Author)) isValid = false;
+        if (string.IsNullOrWhiteSpace(Title)) isValid = false;
+        if (YearPublished == default) isValid = false;
+        if (Stock is null) isValid = false;
+
+        if (!isValid) throw new InvalidBookStateException("Invalid book state");
+    }
+
     protected static void Validate(string isbn, string author, string title, DateTime yearPublished)
     {
         bool isValid = true;
