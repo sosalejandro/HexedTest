@@ -33,5 +33,11 @@ public class BorrowOrder
     {
         IsCopy = true;
     }
+
+    public void SetReturned()
+    {
+        IsReturned = true;
+        DateReturned = DateTime.Now;
+    }
 }
 
