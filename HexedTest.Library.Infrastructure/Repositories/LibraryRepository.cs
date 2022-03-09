@@ -25,6 +25,9 @@ namespace HexedTest.Library.Infrastructure.Repositories
 
         public Task AddLibrary(Domain.Entities.Library library, CancellationToken cancellation = default)
         {
+            Context.Database.ExecuteSqlRaw("TRUNCATE TABLE [books]");
+            Context.Database.ExecuteSqlRaw("TRUNCATE TABLE [borrowOrders]");
+
             Context.AddRange(library.Books, library.BorrowedBooks);
 
             UnitOfWork.SaveChangesAsync(cancellation);
