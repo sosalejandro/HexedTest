@@ -22,6 +22,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HexedTest.Common", "HexedTe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HexedTest.Library.Infrastructure", "HexedTest.Library.Infrastructure\HexedTest.Library.Infrastructure.csproj", "{21FC33E4-2E4A-4459-8BCF-140598118F8F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HexedTest.Library.Api", "HexedTest.Library.Api\HexedTest.Library.Api.csproj", "{107E39B2-E39E-493C-9518-3708CC311F3B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HexedTest.Library.IntegrationTests", "HexedTest.Library.IntegrationTests\HexedTest.Library.IntegrationTests.csproj", "{75E5DB2F-1F8D-40BD-910E-2FEA5F078CF7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,6 +48,14 @@ Global
 		{21FC33E4-2E4A-4459-8BCF-140598118F8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{21FC33E4-2E4A-4459-8BCF-140598118F8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{21FC33E4-2E4A-4459-8BCF-140598118F8F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{107E39B2-E39E-493C-9518-3708CC311F3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{107E39B2-E39E-493C-9518-3708CC311F3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{107E39B2-E39E-493C-9518-3708CC311F3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{107E39B2-E39E-493C-9518-3708CC311F3B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{75E5DB2F-1F8D-40BD-910E-2FEA5F078CF7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75E5DB2F-1F8D-40BD-910E-2FEA5F078CF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75E5DB2F-1F8D-40BD-910E-2FEA5F078CF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75E5DB2F-1F8D-40BD-910E-2FEA5F078CF7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -55,6 +67,8 @@ Global
 		{47AAAC10-3622-456C-AADF-863EF34622F1} = {E39A7F45-5D11-4D86-800A-076863237AAC}
 		{A5A1430E-0728-4753-A380-7C0E2977B277} = {47AAAC10-3622-456C-AADF-863EF34622F1}
 		{21FC33E4-2E4A-4459-8BCF-140598118F8F} = {AFFEE12B-8939-46E8-9781-EA995B131B48}
+		{107E39B2-E39E-493C-9518-3708CC311F3B} = {AFFEE12B-8939-46E8-9781-EA995B131B48}
+		{75E5DB2F-1F8D-40BD-910E-2FEA5F078CF7} = {AFFEE12B-8939-46E8-9781-EA995B131B48}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E87244EE-3620-418A-866D-62DAC7C06805}
