@@ -10,7 +10,7 @@ namespace HexedTest.Library.Infrastructure.EntityConfiguration
     {
         public void Configure(EntityTypeBuilder<BorrowOrder> borrowOrderConfiguration)
         {
-            borrowOrderConfiguration.ToTable("books", LibraryContext.DEFAULT_SCHEMA);
+            borrowOrderConfiguration.ToTable("borrowOrders", LibraryContext.DEFAULT_SCHEMA);
 
             borrowOrderConfiguration.HasKey(bo => bo.Id);
 
