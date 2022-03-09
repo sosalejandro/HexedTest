@@ -405,8 +405,8 @@ public class LibraryTests
         {
             if (i == 0) borrowQueue.Enqueue(
                 () => BorrowCopy(library, bookISBNs[0])
-                ); 
-            
+                );
+
             if (i == 1) borrowQueue.Enqueue(
                 () => BorrowCopy(library, bookISBNs[1])
                 );
@@ -440,10 +440,10 @@ public class LibraryTests
     }
 
     [Theory]
-    [InlineData(2,3)]
-    [InlineData(1,0)]
-    [InlineData(0,0)]
-    [InlineData(0,1)]
+    [InlineData(2, 3)]
+    [InlineData(1, 0)]
+    [InlineData(0, 0)]
+    [InlineData(0, 1)]
     public void BorrowBook_Should_BorrowCopyBook_WhenTheSameUserHaveNotHaveBorrowedMoreThanTwoBooks_AndHasSeveralDifferentCopiesUnreturned
         (int currentOriginalBorrowed, int currentCopiesBorrowed)
     {
@@ -540,7 +540,7 @@ public class LibraryTests
 
         var library = new Entities.Library()
         {
-            Books = { 
+            Books = {
                 CreateBaseBook(bookISBN, original: originalAmount, copies: copiesAmount),
                 CreateBaseBook()
             }
@@ -548,11 +548,352 @@ public class LibraryTests
 
         library.BorrowBook(bookISBN, userId, BorrowOrderPetition.BorrowCopyOrder);
 
-        Action<Entities.Library> BorrowSameBookAgain = 
+        Action<Entities.Library> BorrowSameBookAgain =
             (Entities.Library library) => library.BorrowBook(bookISBN, userId, BorrowOrderPetition.BorrowCopyOrder);
 
         // Act & Assert
         Assert.Throws<InvalidLibraryStateException>(() => BorrowSameBookAgain(library));
+    }
+
+    [Fact]
+    public void ReturnBook_Should_ReturnTheSameOriginalBookBorrowed_WhenIsReturned()
+    {
+        // Arramge
+        Guid userId = Guid.NewGuid();
+        List<string> bookISBNs = new List<string>(4)
+        {
+            "978-2-8340-6328-4",
+        };
+
+        var library = new Entities.Library()
+        {
+            Books = {
+                CreateBaseBook(bookISBNs[0]),
+            }
+        };
+
+        library.BorrowBook(bookISBNs.ElementAt(0), userId, BorrowOrderPetition.BorrowOriginalOrder);
+
+        Func<Entities.Library, Guid, List<BorrowOrder>> DoesThisUserHaveABookByThisIdUnreturned
+            = (Entities.Library lib, Guid userId) => lib.BorrowedBooks
+            .Where(
+                bo => bo.UserId == userId &&
+                bo.BookISBN == bookISBNs.ElementAt(0) &&
+                bo.IsReturned == false
+                )
+            .ToList();
+
+        // Act
+        library.ReturnBook(bookISBNs, userId);
+
+        // Assert
+        Assert.All(DoesThisUserHaveABookByThisIdUnreturned(library, userId),
+            bo => Assert.True(bo.UserId != userId));
+    }
+
+    [Fact]
+    public void ReturnBook_Should_ReturnTheSameCopyBookBorrowed_WhenIsReturned()
+    {
+        // Arramge
+        Guid userId = Guid.NewGuid();
+        List<string> bookISBNs = new List<string>(4)
+        {
+            "978-2-8340-6328-4",
+        };
+
+        var library = new Entities.Library()
+        {
+            Books = {
+                CreateBaseBook(bookISBNs[0]),
+            }
+        };
+
+        library.BorrowBook(bookISBNs.ElementAt(0), userId, BorrowOrderPetition.BorrowCopyOrder);
+
+        Func<Entities.Library, Guid, List<BorrowOrder>> DoesThisUserHaveABookByThisIdUnreturned
+            = (Entities.Library lib, Guid userId) => lib.BorrowedBooks
+            .Where(
+                bo => bo.UserId == userId &&
+                bo.BookISBN == bookISBNs.ElementAt(0) &&
+                bo.IsReturned == false
+                )
+            .ToList();
+
+        // Act
+        library.ReturnBook(bookISBNs, userId);
+
+        // Assert
+        Assert.All(DoesThisUserHaveABookByThisIdUnreturned(library, userId),
+            bo => Assert.True(bo.UserId != userId));
+    }
+
+    [Theory]
+    [InlineData(15)]
+    [InlineData(25)]
+    [InlineData(5000)]
+    [InlineData(1)]
+    public void ReturnBook_Should_OnlyIncreaseOriginalStockAmount_AfterOriginalIsReturned(int stockAmount)
+    {
+        // Arrange
+        Book book;
+        Guid userId = Guid.NewGuid();
+
+        List<string> bookISBNs = new List<string>(4)
+        {
+            "978-2-8340-6328-4",
+            "978-8-9334-4497-9",
+            "978-1-9334-4497-9",
+            "978-4-0183-6798-0"
+        };
+
+        var library = new Entities.Library()
+        {
+            Books = {
+                CreateBaseBook(bookISBNs[0], original: stockAmount
+                ),
+                CreateBaseBook(bookISBNs[1]),
+                CreateBaseBook(bookISBNs[2]),
+                CreateBaseBook(bookISBNs[3])
+            }
+        };
+
+        library.BorrowBook(bookISBNs.ElementAt(0), userId, BorrowOrderPetition.BorrowOriginalOrder);
+
+        Func<Entities.Library, Guid, List<BorrowOrder>> DoesThisUserHaveABookByThisIdUnreturned
+            = (Entities.Library lib, Guid userId) => lib.BorrowedBooks
+            .Where(
+                bo => bo.UserId == userId &&
+                bo.BookISBN == bookISBNs.ElementAt(0) &&
+                bo.IsReturned == false
+                )
+            .ToList();
+
+        // Act
+        library.ReturnBook(new List<string>() { "978-2-8340-6328-4" }, userId);
+        book = library.Books.Where(bo => bo.ISBN == bookISBNs.ElementAt(0)).First();
+
+        // Assert
+        Assert.Equal(stockAmount, book.Stock.OriginalAmount);
+        Assert.All(DoesThisUserHaveABookByThisIdUnreturned(library, userId),
+            bo => Assert.True(bo.UserId != userId));
+    }
+
+    [Theory]
+    [InlineData(15)]
+    [InlineData(25)]
+    [InlineData(5000)]
+    [InlineData(1)]
+    public void ReturnBook_Should_OnlyIncreaseCopiesStockAmount_AfterCopyIsReturned(int stockAmount)
+    {
+        // Arrange
+        Book book;
+        Guid userId = Guid.NewGuid();
+
+        List<string> bookISBNs = new List<string>(4)
+        {
+            "978-2-8340-6328-4",
+            "978-8-9334-4497-9",
+            "978-1-9334-4497-9",
+            "978-4-0183-6798-0"
+        };
+
+        var library = new Entities.Library()
+        {
+            Books = {
+                CreateBaseBook(bookISBNs[0], copies: stockAmount
+                ),
+                CreateBaseBook(bookISBNs[1]),
+                CreateBaseBook(bookISBNs[2]),
+                CreateBaseBook(bookISBNs[3])
+            }
+        };
+
+        library.BorrowBook(bookISBNs.ElementAt(0), userId, BorrowOrderPetition.BorrowCopyOrder);
+
+        Func<Entities.Library, Guid, List<BorrowOrder>> DoesThisUserHaveABookByThisIdUnreturned
+            = (Entities.Library lib, Guid userId) => lib.BorrowedBooks
+            .Where(
+                bo => bo.UserId == userId &&
+                bo.BookISBN == bookISBNs.ElementAt(0) &&
+                bo.IsReturned == false
+                )
+            .ToList();
+
+        // Act
+        library.ReturnBook(new List<string>() { "978-2-8340-6328-4" }, userId);
+        book = library.Books.Where(bo => bo.ISBN == bookISBNs.ElementAt(0)).First();
+
+        // Assert
+        Assert.Equal(stockAmount, book.Stock.CopiesAmount);
+        Assert.All(DoesThisUserHaveABookByThisIdUnreturned(library, userId),
+            bo => Assert.True(bo.UserId != userId));
+    }
+
+    [Fact]
+    public void ReturnBook_Should_Throw_WhenTheUserHasNoCurrentUnreturnedBooks()
+    {
+        // Arrange
+        Guid userId = Guid.NewGuid();
+
+        List<string> bookISBNs = new List<string>(4)
+        {
+            "978-2-8340-6328-4",
+            "978-8-9334-4497-9",
+            "978-1-9334-4497-9",
+            "978-4-0183-6798-0"
+        };
+
+        var library = new Entities.Library()
+        {
+            Books = {
+                CreateBaseBook(bookISBNs[0]),
+                CreateBaseBook(bookISBNs[1]),
+                CreateBaseBook(bookISBNs[2]),
+                CreateBaseBook(bookISBNs[3])
+            }
+        };
+
+        Action<Entities.Library> ReturnBook 
+            = (Entities.Library lib) => lib.ReturnBook(
+                new List<string>() { bookISBNs.ElementAt(0) }, userId);
+
+        // Act & Assert
+        Assert.Throws<InvalidLibraryOperationException>(() => ReturnBook(library));
+    }
+
+    [Fact]
+    public void ReturnBook_Should_Throw_WhenISBNsInputAreNullOrEmpty()
+    {
+        // Arrange
+        Guid userId = Guid.NewGuid();
+
+        List<string> bookISBNs = new List<string>(4)
+        {
+            "978-2-8340-6328-4",
+            "978-8-9334-4497-9",
+            "978-1-9334-4497-9",
+            "978-4-0183-6798-0"
+        };
+
+        var library = new Entities.Library()
+        {
+            Books = {
+                CreateBaseBook(bookISBNs[0]),
+                CreateBaseBook(bookISBNs[1]),
+                CreateBaseBook(bookISBNs[2]),
+                CreateBaseBook(bookISBNs[3])
+            }
+        };
+
+        library.BorrowBook(bookISBNs.ElementAt(0), userId, BorrowOrderPetition.BorrowOriginalOrder);
+
+        Action<Entities.Library> ReturnBook
+            = (Entities.Library lib) => lib.ReturnBook(
+                new List<string>(3) { "", null , "" }, userId);
+
+        // Act & Assert
+        Assert.Throws<InvalidInputException>(() => ReturnBook(library));
+    }
+
+    [Fact]
+    public void ReturnBook_Should_Throw_WhenUserInputIsNullOrEmpty()
+    {
+        // Arrange
+        List<string> bookISBNs = new List<string>(4)
+        {
+            "978-2-8340-6328-4",
+            "978-8-9334-4497-9",
+            "978-1-9334-4497-9",
+            "978-4-0183-6798-0"
+        };
+
+        var library = new Entities.Library()
+        {
+            Books = {
+                CreateBaseBook(bookISBNs[0]),
+                CreateBaseBook(bookISBNs[1]),
+                CreateBaseBook(bookISBNs[2]),
+                CreateBaseBook(bookISBNs[3])
+            }
+        };
+
+        library.BorrowBook(bookISBNs.ElementAt(0), Guid.NewGuid(), BorrowOrderPetition.BorrowOriginalOrder);
+
+        Action<Entities.Library> ReturnBook
+            = (Entities.Library lib) => lib.ReturnBook(
+                new List<string>(3) { bookISBNs.ElementAt(0) }, Guid.Empty);
+
+        // Act & Assert
+        Assert.Throws<InvalidInputException>(() => ReturnBook(library));
+    }
+
+    [Fact]
+    public void ReturnBook_Should_Throw_WhenInputISBNDoesNotExist()
+    {
+        // Arrange
+        Guid userId = Guid.NewGuid();
+
+        List<string> bookISBNs = new List<string>(4)
+        {
+            "978-2-8340-6328-4",
+            "978-8-9334-4497-9",
+            "978-1-9334-4497-9",
+            "978-4-0183-6798-0"
+        };
+
+        var library = new Entities.Library()
+        {
+            Books = {
+                CreateBaseBook(bookISBNs[0]),
+                CreateBaseBook(bookISBNs[1]),
+                CreateBaseBook(bookISBNs[2]),
+                CreateBaseBook(bookISBNs[3])
+            }
+        };
+
+        library.BorrowBook(bookISBNs.ElementAt(0), userId, BorrowOrderPetition.BorrowOriginalOrder);
+
+        Action<Entities.Library> ReturnBook
+            = (Entities.Library lib) => lib.ReturnBook(
+                new List<string>(3) { "123-4-5432-4217-4" }, userId);
+
+        // Act & Assert
+        Assert.Throws<InvalidLibraryStateException>(() => ReturnBook(library));
+    }
+
+    [Fact]
+    public void ReturnBook_Should_Throw_WhenNoUnreturnedBooksExistByGivenISBN()
+    {
+        // Arrange
+        Guid userId = Guid.NewGuid();
+
+        List<string> bookISBNs = new List<string>(4)
+        {
+            "978-2-8340-6328-4",
+            "978-8-9334-4497-9",
+            "978-1-9334-4497-9",
+            "978-4-0183-6798-0"
+        };
+
+        var library = new Entities.Library()
+        {
+            Books = {
+                CreateBaseBook(bookISBNs[0]),
+                CreateBaseBook(bookISBNs[1]),
+                CreateBaseBook(bookISBNs[2]),
+                CreateBaseBook(bookISBNs[3])
+            }
+        };
+
+        library.BorrowBook(bookISBNs.ElementAt(0), userId, BorrowOrderPetition.BorrowOriginalOrder);
+
+        Action<Entities.Library> ReturnBook
+            = (Entities.Library lib) => lib.ReturnBook(
+                new List<string>(3) { bookISBNs.ElementAt(3) }, userId);
+
+        // Act & Assert
+        Assert.Throws<InvalidLibraryStateException>(() => ReturnBook(library));
+        Assert.Contains(library.Books, b => b.ISBN == bookISBNs.ElementAt(3));
     }
 
     private static Book CreateBaseBook(string isbn = "978-1-0217-2611-7", int original = 15, int copies = 30)

@@ -32,6 +32,11 @@ public class Library : AggregateRoot
         }
     }
 
+    public void ReturnBook(List<string> isbns, Guid userId)
+    {
+        ApplyDomainEvent(new ReturnBookOrder(isbns, userId));
+    }
+
     protected override void ChangeStateByUsingDomainEvent(IDomainEvent domainEvent)
     {
         switch (domainEvent)
@@ -41,14 +46,17 @@ public class Library : AggregateRoot
                 break;
             case BorrowCopyOrder e:
                 HandleState(e);
-                break;            
+                break;
+            case ReturnBookOrder e:
+                HandleState(e);
+                break;
             default:
                 break;
         }
     }
 
     protected override void ValidateState()
-    {        
+    {
         try
         {
             Parallel.ForEach(Books, book =>
@@ -101,6 +109,70 @@ public class Library : AggregateRoot
             copyBorrowed.SetCopy();
 
             BorrowedBooks.Add(copyBorrowed);
+        }
+    }
+
+    protected void HandleState(ReturnBookOrder e)
+    {
+        #region Validate User Input
+        if (e.UserId == Guid.Empty) throw new InvalidInputException("Invalid User Id");
+        #endregion Validate User Input
+
+        #region CheckUserHasCurrentBorrowedOrders
+        bool AreThereBooksThatNeedToBeReturnedByThisUser(BorrowOrder bo) =>
+                    bo.UserId == e.UserId &&
+                    bo.IsReturned == false;
+
+        var borrowedItems = BorrowedBooks
+            .Where(AreThereBooksThatNeedToBeReturnedByThisUser)
+            .ToHashSet();
+
+        if (borrowedItems is null || borrowedItems.Count == 0) throw new InvalidLibraryOperationException(
+            "There is no book that needs to be returned now by this user.");
+        #endregion CheckUserHasCurrentBorrowedOrders
+
+        foreach (string isbn in e.ISBNs)
+        {
+            #region Validate Input
+            if (string.IsNullOrWhiteSpace(isbn)) 
+                throw new InvalidInputException("Invalid ISBN input");
+            #endregion Validate Input
+
+            #region SearchBorrowOrder
+            var borrowedItem = BorrowedBooks
+                .Where(x => x.BookISBN == isbn && x.IsReturned == false).FirstOrDefault();
+            #endregion SearchBorrowOrder
+
+            if (borrowedItem is not null)
+            {
+                #region Handle ReturnOrder
+                borrowedItem.SetReturned();
+
+                var book = Books.Where(b => b.ISBN == isbn)
+                    .FirstOrDefault();
+
+                if (book is null) throw new InvalidLibraryStateException(
+                    $"Book {isbn} doesn't exist");
+
+                if (borrowedItem.IsCopy)
+                {
+                    book.SetNewStock(
+                        BookStock.Create(book.Stock.OriginalAmount,
+                        book.Stock.CopiesAmount + 1)
+                        );
+                    continue;
+                }
+
+                book.SetNewStock(
+                    BookStock.Create(book.Stock.OriginalAmount + 1,
+                    book.Stock.CopiesAmount)
+                    );
+
+                continue;
+                #endregion Handle ReturnOrder
+            }
+
+            throw new InvalidLibraryStateException($"Invalid Book ISBN provided [{isbn}]");
         }
     }
 
