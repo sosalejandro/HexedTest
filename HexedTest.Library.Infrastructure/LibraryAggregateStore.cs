@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace HexedTest.Library.Infrastructure
 {
-    public class LibraryAggregateStore
+    public class LibraryAggregateStore : IAggregateStore<Domain.Entities.Library>
     {
         private readonly CosmosClient cosmosClient;
         private readonly Container libraryContainer;
