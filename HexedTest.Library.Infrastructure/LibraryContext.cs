@@ -1,4 +1,5 @@
 ﻿
+using HexedTest.Library.Infrastructure.EntityConfiguration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +21,8 @@ namespace HexedTest.Library.Infrastructure
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
+            modelBuilder.ApplyConfiguration(new BookEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new BorrowOrderEntityTypeConfiguration());
         }
 
         public async Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default)
