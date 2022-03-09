@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace HexedTest.Library.Domain.Tests;
 
+[Collection("Library")]
 public class LibraryTests
 {
     [Fact]

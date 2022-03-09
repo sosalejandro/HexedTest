@@ -8,6 +8,7 @@ using System.Runtime;
 
 namespace HexedTest.Library.Domain.Tests;
 
+[Collection("Library")]
 public class BookTests
 {
     [Fact]
