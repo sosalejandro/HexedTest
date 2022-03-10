@@ -16,6 +16,10 @@ public class BorrowOrder
     public DateTime DateRequested { get; init; }
     public DateTime? DateReturned { get; private set; }
 
+    public BorrowOrder()
+    {
+
+    }
     internal BorrowOrder(Guid id, Guid userId, string bookISBN)
     {
         Id = id;

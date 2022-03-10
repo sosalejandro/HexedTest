@@ -10,7 +10,10 @@ public class Book
     public string Title { get; init; }
     public DateTime YearPublished { get; init; }
     public BookStock Stock { get; private set; }
+    public Book()
+    {
 
+    }
     internal Book(string isbn, string author, string title, DateTime yearPublished, BookStock stock)
     {
         ISBN = isbn;
