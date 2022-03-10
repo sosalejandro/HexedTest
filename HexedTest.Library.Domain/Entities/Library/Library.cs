@@ -14,6 +14,20 @@ public partial class Library : AggregateRoot
     {
 
     }
+
+    internal Library(HashSet<Book> books)
+    {
+        Books = books;
+    }
+
+    public static Library CreateFromBooks(HashSet<Book> books)
+    {
+        if (books is null || books.Count == 0) 
+            throw new InvalidLibraryOperationException(
+                "Cannot add books to the library from an empty collection");
+
+        return new Library(books);
+    }
     public void BorrowBook(string isbn, Guid userId, BorrowOrderPetition petition)
     {
         if (petition is BorrowOrderPetition.BorrowOriginalOrder)
@@ -62,12 +76,12 @@ public partial class Library : AggregateRoot
         {
             throw;
         }
-    }   
+    }
 
     private bool CheckForOtherBorrowedItems(IDomainEvent e)
     {
         Func<BorrowOrder, bool> CopyQuery = (BorrowOrder bo) =>
-            bo.IsCopy == true && 
+            bo.IsCopy == true &&
             bo.IsReturned == false &&
             bo.BookISBN == ((BorrowCopyOrder)e).ISBN &&
             bo.UserId == ((BorrowCopyOrder)e).UserId;
