@@ -15,7 +15,8 @@ namespace HexedTest.Library.Infrastructure.EntityConfiguration
             borrowOrderConfiguration.HasKey(bo => bo.Id);
 
             borrowOrderConfiguration.Property(bo => bo.Id)
-                .UseHiLo("borroworderseq", LibraryContext.DEFAULT_SCHEMA);
+                .HasColumnType("UNIQUEIDENTIFIER")
+                .IsRequired();
 
             borrowOrderConfiguration.HasOne(typeof(Book))
                 .WithMany()

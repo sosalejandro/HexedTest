@@ -14,9 +14,6 @@ namespace HexedTest.Library.Infrastructure.EntityConfiguration
 
             bookConfiguration.HasKey(b => b.ISBN);
 
-            bookConfiguration.Property(b => b.ISBN)
-                .IsRequired();
-
             bookConfiguration.Property(b => b.Title)
                 .IsRequired();
 
