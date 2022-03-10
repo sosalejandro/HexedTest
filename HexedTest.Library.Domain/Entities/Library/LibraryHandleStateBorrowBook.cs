@@ -1,5 +1,6 @@
 ﻿using HexedTest.Common;
 using HexedTest.Library.Domain.Events;
+using HexedTest.Library.Domain.Exceptions;
 using HexedTest.Library.Domain.ValueObjects;
 
 namespace HexedTest.Library.Domain.Entities;
@@ -13,7 +14,8 @@ public partial class Library : AggregateRoot
             var book = Books.Where(b => b.ISBN == e.ISBN)
                 .FirstOrDefault();
 
-            if (book is null) throw new ArgumentNullException(nameof(book));
+            if (book is null) throw new BookNotFoundException(
+                $"Book [{e.ISBN}] doesn't exist.");
 
             var originalBorrowed = BorrowOrder.Create(e.UserId, e.ISBN);
 
@@ -30,7 +32,8 @@ public partial class Library : AggregateRoot
             var book = Books.Where(b => b.ISBN == e.ISBN)
                 .FirstOrDefault();
 
-            if (book is null) throw new ArgumentNullException(nameof(book));
+            if (book is null) throw new BookNotFoundException(
+                $"Book [{e.ISBN}] doesn't exist.");
 
             var copyBorrowed = BorrowOrder.Create(e.UserId, e.ISBN);
 
