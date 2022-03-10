@@ -1,2 +1,11 @@
 ﻿global using HexedTest.Library.Domain.SeedWork;
 global using HexedTest.Library.Domain.Enums;
+global using Serilog;
+global using Serilog.Events;
+global using HexedTest.Library.Api.Services;
+global using HexedTest.Library.Infrastructure;
+global using HexedTest.Library.Infrastructure.HealthCheck;
+global using Microsoft.EntityFrameworkCore;
+global using Microsoft.OpenApi.Models;
+global using System.Reflection;
+global using HexedTest.Library.Api.Extensions;
