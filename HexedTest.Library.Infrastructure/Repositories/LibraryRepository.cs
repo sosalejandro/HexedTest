@@ -23,16 +23,17 @@ namespace HexedTest.Library.Infrastructure.Repositories
             }
         }
 
-        public Task AddLibrary(Domain.Entities.Library library, CancellationToken cancellation = default)
+        public async Task AddLibrary(Domain.Entities.Library library, CancellationToken cancellation = default)
         {
-            Context.Database.ExecuteSqlRaw("TRUNCATE TABLE [books]");
-            Context.Database.ExecuteSqlRaw("TRUNCATE TABLE [borrowOrders]");
+            Context.Database.EnsureDeleted();
+            Context.Database.EnsureCreated();
 
-            Context.AddRange(library.Books, library.BorrowedBooks);
+            await Context.Books.AddRangeAsync(library.Books, cancellation);
+            await Context.BorrowOrders.AddRangeAsync(library.BorrowedBooks, cancellation);
 
-            UnitOfWork.SaveChangesAsync(cancellation);
+            await UnitOfWork.SaveChangesAsync(cancellation);
 
-            return Task.CompletedTask;
+            
         }
     }
 }
