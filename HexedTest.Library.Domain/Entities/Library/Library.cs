@@ -18,10 +18,11 @@ public partial class Library : AggregateRoot
     internal Library(HashSet<Book> books)
     {
         Books = books;
+        ValidateState();
     }
 
     public static Library CreateFromBooks(HashSet<Book> books)
-    {
+    {        
         if (books is null || books.Count == 0) 
             throw new InvalidLibraryOperationException(
                 "Cannot add books to the library from an empty collection");

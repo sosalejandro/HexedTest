@@ -754,7 +754,7 @@ public class LibraryTests
             }
         };
 
-        Action<Entities.Library> ReturnBook 
+        Action<Entities.Library> ReturnBook
             = (Entities.Library lib) => lib.ReturnBook(
                 new List<string>() { bookISBNs.ElementAt(0) }, userId);
 
@@ -790,7 +790,7 @@ public class LibraryTests
 
         Action<Entities.Library> ReturnBook
             = (Entities.Library lib) => lib.ReturnBook(
-                new List<string>(3) { "", null , "" }, userId);
+                new List<string>(3) { "", null, "" }, userId);
 
         // Act & Assert
         Assert.Throws<InvalidInputException>(() => ReturnBook(library));
@@ -896,6 +896,79 @@ public class LibraryTests
         Assert.Throws<InvalidLibraryStateException>(() => ReturnBook(library));
         Assert.Contains(library.Books, b => b.ISBN == bookISBNs.ElementAt(3));
     }
+
+    [Fact]
+    public void CreateFromBooks_Should_InitializeLibraryFromBookCollection()
+    {
+        // Arrange
+        Domain.Entities.Library library;
+        List<string> bookISBNs = new List<string>(4)
+        {
+            "978-2-8340-6328-4",
+            "978-8-9334-4497-9",
+            "978-1-9334-4497-9",
+            "978-4-0183-6798-0"
+        };
+
+        var books = new HashSet<Book>()
+        {
+                CreateBaseBook(bookISBNs[0]),
+                CreateBaseBook(bookISBNs[1]),
+                CreateBaseBook(bookISBNs[2]),
+                CreateBaseBook(bookISBNs[3])
+        };
+
+        // Act
+        library = Domain.Entities.Library.CreateFromBooks(books);
+
+        // Assert
+        Assert.NotNull(library);
+        Assert.All(library.Books, 
+            b => Assert.False(string.IsNullOrWhiteSpace(b.ISBN)));
+        Assert.Empty(library.BorrowedBooks);
+    }
+
+    [Fact]
+    public void CreateFromBooks_Should_Throw_WhenBookCollectionIsNull()
+    {
+        // Arrange
+        Domain.Entities.Library library = null;
+
+        var books = new HashSet<Book>()
+        {
+                null,
+                null,
+                null,
+                null
+        };
+
+        Action<Domain.Entities.Library, HashSet<Book>> CreateLibraryFromBooks = 
+            (lib, books) => lib = Domain.Entities.Library.CreateFromBooks(books);
+
+        // Act & Assert
+        Assert.Throws<AggregateException>(() => CreateLibraryFromBooks(library, books));
+        Assert.Null(library);
+    }
+
+    [Fact]
+    public void CreateFromBooks_Should_Throw_WhenBookCollectionIsEmpty()
+    {
+        // Arrange
+        Domain.Entities.Library library = null;
+
+        var books = new HashSet<Book>()
+        {
+  
+        };
+
+        Action<Domain.Entities.Library, HashSet<Book>> CreateLibraryFromBooks =
+            (lib, books) => lib = Domain.Entities.Library.CreateFromBooks(books);
+
+        // Act & Assert
+        Assert.Throws<InvalidLibraryOperationException>(() => CreateLibraryFromBooks(library, books));
+        Assert.Null(library);
+    }
+
 
     private static Book CreateBaseBook(string isbn = "978-1-0217-2611-7", int original = 15, int copies = 30)
     {
