@@ -20,11 +20,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "HexedTest.Common", "HexedTe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HexedTest.Common", "HexedTest.Common\HexedTest.Common.csproj", "{A5A1430E-0728-4753-A380-7C0E2977B277}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HexedTest.Library.Infrastructure", "HexedTest.Library.Infrastructure\HexedTest.Library.Infrastructure.csproj", "{21FC33E4-2E4A-4459-8BCF-140598118F8F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HexedTest.Library.Infrastructure", "HexedTest.Library.Infrastructure\HexedTest.Library.Infrastructure.csproj", "{21FC33E4-2E4A-4459-8BCF-140598118F8F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HexedTest.Library.Api", "HexedTest.Library.Api\HexedTest.Library.Api.csproj", "{107E39B2-E39E-493C-9518-3708CC311F3B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HexedTest.Library.Api", "HexedTest.Library.Api\HexedTest.Library.Api.csproj", "{107E39B2-E39E-493C-9518-3708CC311F3B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HexedTest.Library.IntegrationTests", "HexedTest.Library.IntegrationTests\HexedTest.Library.IntegrationTests.csproj", "{75E5DB2F-1F8D-40BD-910E-2FEA5F078CF7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HexedTest.Library.IntegrationTests", "HexedTest.Library.IntegrationTests\HexedTest.Library.IntegrationTests.csproj", "{75E5DB2F-1F8D-40BD-910E-2FEA5F078CF7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HexedTest.Library.Projector", "HexedTest.Library.Projector\HexedTest.Library.Projector.csproj", "{C5B9F107-99CE-4575-ABC5-B479F5D32D55}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HexedTest.Library.Query.Api", "HexedTest.Library.Query.Api\HexedTest.Library.Query.Api.csproj", "{3F24DFB9-3DFE-4AF7-90F2-9541C311E07D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -56,6 +60,14 @@ Global
 		{75E5DB2F-1F8D-40BD-910E-2FEA5F078CF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{75E5DB2F-1F8D-40BD-910E-2FEA5F078CF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{75E5DB2F-1F8D-40BD-910E-2FEA5F078CF7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5B9F107-99CE-4575-ABC5-B479F5D32D55}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5B9F107-99CE-4575-ABC5-B479F5D32D55}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5B9F107-99CE-4575-ABC5-B479F5D32D55}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5B9F107-99CE-4575-ABC5-B479F5D32D55}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F24DFB9-3DFE-4AF7-90F2-9541C311E07D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F24DFB9-3DFE-4AF7-90F2-9541C311E07D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F24DFB9-3DFE-4AF7-90F2-9541C311E07D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F24DFB9-3DFE-4AF7-90F2-9541C311E07D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -69,6 +81,8 @@ Global
 		{21FC33E4-2E4A-4459-8BCF-140598118F8F} = {AFFEE12B-8939-46E8-9781-EA995B131B48}
 		{107E39B2-E39E-493C-9518-3708CC311F3B} = {AFFEE12B-8939-46E8-9781-EA995B131B48}
 		{75E5DB2F-1F8D-40BD-910E-2FEA5F078CF7} = {AFFEE12B-8939-46E8-9781-EA995B131B48}
+		{C5B9F107-99CE-4575-ABC5-B479F5D32D55} = {AFFEE12B-8939-46E8-9781-EA995B131B48}
+		{3F24DFB9-3DFE-4AF7-90F2-9541C311E07D} = {AFFEE12B-8939-46E8-9781-EA995B131B48}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E87244EE-3620-418A-866D-62DAC7C06805}
