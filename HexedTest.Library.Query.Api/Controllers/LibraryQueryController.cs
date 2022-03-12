@@ -21,8 +21,8 @@ public class LibraryQueryController : ControllerBase
     {
         string sql = @"SELECT [ISBN], [Author], [Title], [YearPublished], [Stock_OriginalAmount], [Stock_CopiesAmount]
                         FROM [Library].[library].[books]
-                        WHERE [Stock_OriginalAmount] >= 0
-                        OR [Stock_CopiesAmount] >= 0";
+                        WHERE [Stock_OriginalAmount] > 0
+                        OR [Stock_CopiesAmount] > 0";
 
         using var connection = new SqlConnection(configuration.GetConnectionString("Default"));
         var ordelDetail = (await connection.QueryAsync(sql)).ToList();
