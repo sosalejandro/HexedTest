@@ -14,6 +14,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{44841593-233E-4CC3-81F8-7E6F6A42E534}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		Readme.md = Readme.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "HexedTest.Common", "HexedTest.Common", "{47AAAC10-3622-456C-AADF-863EF34622F1}"
@@ -28,7 +29,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HexedTest.Library.Integrati
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HexedTest.Library.Projector", "HexedTest.Library.Projector\HexedTest.Library.Projector.csproj", "{C5B9F107-99CE-4575-ABC5-B479F5D32D55}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HexedTest.Library.Query.Api", "HexedTest.Library.Query.Api\HexedTest.Library.Query.Api.csproj", "{3F24DFB9-3DFE-4AF7-90F2-9541C311E07D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HexedTest.Library.Query.Api", "HexedTest.Library.Query.Api\HexedTest.Library.Query.Api.csproj", "{3F24DFB9-3DFE-4AF7-90F2-9541C311E07D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
