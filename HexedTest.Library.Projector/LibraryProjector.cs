@@ -41,7 +41,7 @@ public class LibraryProjector
 
         var library = await libraryAggregateStore.LoadAsync();
 
-        await libraryRepository.AddLibrary(library, new System.Threading.CancellationToken());
+        libraryRepository.AddLibrary(library, new System.Threading.CancellationToken());
 
         logger.LogInformation("Projection done");
     }
