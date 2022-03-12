@@ -19,7 +19,16 @@ namespace HexedTest.Library.Api.Controllers
             this.logger = logger;
         }
 
+        /// <summary>
+        /// Borrows a book. 0 for original. 1 for copy.
+        /// </summary>
+        /// <param name="command">Body object</param>
+        /// <returns>No Content response</returns>
+        /// <response code="200">Returns No Content</response>
+        /// <response code="400">Returns Bad Request with the exception message</response>
         [HttpPost("borrowBook")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Post(BorrowBookCommand command)
         {
             try
@@ -33,8 +42,16 @@ namespace HexedTest.Library.Api.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
+        /// <summary>
+        /// Returns a book by given ISBNs and userId
+        /// </summary>
+        /// <param name="command">Body object</param>
+        /// <returns>No Content response</returns>
+        /// <response code="200">Returns No Content</response>
+        /// <response code="400">Returns Bad Request with the exception message</response>
         [HttpPost("returnBook")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Post(ReturnBookCommand command)
         {
             try
